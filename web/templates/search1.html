@@ -1,0 +1,406 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>搜索</title>
+<meta name="description" content=" 内容介绍不超过100个中文">
+<meta name="keywords" content=" 内容相关关键词3-5个">
+
+
+<!-- <link href="static/css/index.css" rel="stylesheet" type="text/css" /> -->
+<link href="{{url_for("static", filename = "css/index.css")}}" rel="stylesheet" type="text/css" />
+
+<link rel="stylesheet" href="{{url_for("static", filename = "css/clock.css")}}" type="text/css"/>
+
+<link rel="stylesheet" href="{{url_for("static", filename = "css/common.css")}}" type="text/css"/>
+
+<link rel="stylesheet" type="text/css" href="{{url_for("static", filename = "css/result.css")}}">
+
+
+
+<!-- <script type="text/javascript" src="static/js/jquery-1.4.3.min.js"></script> -->
+<script type="text/javascript" src="{{url_for("static", filename = "js/jquery-1.4.3.min.js")}}"></script>
+
+<script src="js/jquery.js"></script>
+<script src="js/bootstrap-typeahead.js"></script>
+<script src="js/jquery.min.js"></script>
+<script src="js/jquery.autocomplete.min.js"></script>
+
+
+
+</head>
+
+<body>
+    <div id="container" class="nav">
+
+        <!-- 点击logo 返回首页 -->
+        <div class="nav_left">
+            <a href="/"><img alt="logo" src="{{url_for("static", filename="images/news_2.jpg")}}"></a>
+        </div>
+
+        <!--中间搜索部分-->
+        <div id="content" class="nav_mid">
+            <form id="search" class="search_form" action="/search/" method="POST">
+
+            <p style="text-align: center;">
+                <span style="text-align: center;" class="search_t">WeiBu</span>
+                {% if key %}
+                    <input name="key_word" type="text" class="searchIpt f14" id="input_key_word" placeholder="请输入关键词或通配符表达式">
+                {% else %}
+                    <input name="key_word" type="text" class="searchIpt f14" id="input_key_word" placeholder="请输入关键词或通配符表达式">
+                {% endif %}
+                    <input type="submit" value="搜索">
+                <div class="result_search_suggest" id="gov_search_suggest">
+                    <ul>
+                    </ul>
+                </div>
+
+            </p>
+            </form>
+        </div>
+
+
+        {% block high_search%}
+        {% endblock %}
+    </div>
+
+    <div class="line"></div>    <!--分割线-->
+
+    <!--显示结果数和时间数-->
+    <div class="results_info">
+        <h4>
+            我们查询到约 <span class="newsnum"></span> 个结果，共用时约 <!--<span class="newsnum"><%=time%></span>--> 秒
+        </h4>
+        <!--<%
+            if (arrlist.size() > 0) {
+                Iterator<News> iter = arrlist.iterator();
+                News news;
+                while (iter.hasNext()) {
+                    news = iter.next();
+        %>-->
+    </div>
+
+    <div class="newmain">
+        {% if error%}
+            {% for doc in docs%}
+            <div id="doc">
+                <ul id="navigation">
+                    <!-- <p><big><a href="/search/{{doc.id}}/" target="_blank">{{doc.title}}</a></big></p> -->
+                    <h3 class="news_title"><a class="doc_title" href="/search/{{doc.id}}/" target="_blank">{{doc.title}}</a></h3>
+                    <p class="news_info">{{doc.time}}</p>
+                    <p class="news_abstract">{{doc.snippet}}</p>
+                    <p calss="news_url"><a class="doc_url" href="{{ doc.url }}" target="_blank">{{doc.url}}</a></p>
+                    
+                    <p class="news_similar">
+                        <a class="doc_sim" href="/similar/search/{{doc.id}}/" target="_blank">更多相关新闻查看</a>
+                    </p>
+                    </br>
+                </ul>
+            </div>
+            <br/>
+            {% endfor %}
+        {% block next %}
+
+        <div class="paging">
+            <ul>
+                <!-- <li></li> -->
+                <li><a href="/search/page/{{1}}/">首页</a></li>
+                {% if page_no %}
+                <li><a href="/search/page/{{page_no-1}}/">上一页</a></li>
+                {% else %}
+                <li><a href="">上一页</a></li>
+                {% endif %}
+                {% for i in range(1, 11) %}
+                    <li><a href="/search/page/{{i}}/">{{i}}</a></li>
+                {% endfor %}
+                {% if page_no %}
+                <li><a href="/search/page/{{page_no+1}}/">下一页</a></li>
+                {% else %}
+                <li><a href="">下一页</a></li>
+                {% endif %}
+            </ul>
+        </div>
+
+        <!-- <ul>
+            {% for i in page %}
+                <a href="/search/page/{{i}}/">{{i}}</a>&nbsp;
+            {% endfor %}
+        </ul> -->
+
+        {% endblock %}
+        {% else %}
+            <p>对不起，没有您搜索的网页！</p>
+        {% endif %}
+
+    </div>
+
+    <!--竖的分界线-->
+    <div class="line_ver"></div>
+
+    <div class="recommend">
+        <div class="recommend_title"><img src="{{url_for("static", filename="images/RelatedSearch.png")}}" width="300" height="50"/></div>
+        <div class="recommend_body">
+          <table class="recommend_table"  border="0" cellpadding="0" cellspacing="0">
+              <tbody>
+                <tr class="rec_title">
+                  <th width="15%" height="30px">排名</th>
+                  <th>新闻标题</th>
+                  <th width="20%">热度</th>
+                </tr>
+                {% for doc in sug_docs %}
+                <tr> <!--真正显示时候只需保留这个<tr> 共循环产生10个结果top10-->
+                    <td height="50px">
+                        <div class="rec_num">{{doc.id}}</div>
+                    </td>
+                    <td>
+                        <a href="/search/{{doc.id}}/" style="text-decoration:none;color: #666B85;">{{doc.title}}</a>
+                    </td>
+                    <td>{{doc.comment_num}}</td>
+                </tr>
+                {% endfor %}
+                <!--循环时请删除-->
+                <!-- <tr>
+                  <td height="30px"></td>
+                  <td>&nbsp;</td>
+                  <td>&nbsp;</td>
+                </tr>
+                <tr>
+                  <td height="30px">
+                  <td>&nbsp;</td>
+                  <td>&nbsp;</td>
+                </tr>
+                <tr>
+                  <td height="30px">&nbsp;</td>
+                  <td>&nbsp;</td>
+                  <td>&nbsp;</td>
+                </tr>
+                <tr>
+                  <td height="30px">&nbsp;</td>
+                  <td>&nbsp;</td>
+                  <td>&nbsp;</td>
+                </tr>
+                <tr>
+                  <td height="30px">&nbsp;</td>
+                  <td>&nbsp;</td>
+                  <td>&nbsp;</td>
+                </tr>
+                <tr>
+                  <td height="30px">&nbsp;</td>
+                  <td>&nbsp;</td>
+                  <td>&nbsp;</td>
+                </tr>
+                <tr>
+                  <td height="30px">&nbsp;</td>
+                  <td>&nbsp;</td>
+                  <td>&nbsp;</td>
+                </tr>
+                <tr>
+                  <td height="30px">&nbsp;</td>
+                  <td>&nbsp;</td>
+                  <td>&nbsp;</td>
+                </tr>
+                <tr>
+                  <td height="30px">&nbsp;</td>
+                  <td>&nbsp;</td>
+                  <td>&nbsp;</td>
+                </tr> -->
+                <!--循环前删除截止-->
+              </tbody>
+            </table>
+        </div>
+    </div>
+
+
+
+	
+		
+
+
+
+<script type="text/javascript">
+
+//实现搜索输入框的输入提示js类
+function oSearchSuggest(searchFuc){
+    var input = $('#input_key_word');
+    var suggestWrap = $('#gov_search_suggest');
+    var key = "";
+    var init = function(){
+        input.bind('keyup',sendKeyWord);
+        input.bind('blur',function(){setTimeout(hideSuggest,100);})
+    }
+    var hideSuggest = function(){
+        suggestWrap.hide();
+    }
+    
+    //发送请求，根据关键字到后台查询
+    var sendKeyWord = function(event){
+        
+        //键盘选择下拉项
+        if(suggestWrap.css('display')=='block'&&event.keyCode == 38||event.keyCode == 40){
+            var current = suggestWrap.find('li.hover');
+            if(event.keyCode == 38){
+                if(current.length>0){
+                    var prevLi = current.removeClass('hover').prev();
+                    if(prevLi.length>0){
+                        prevLi.addClass('hover');
+                        input.val(prevLi.html());
+                    }
+                }else{
+                    var last = suggestWrap.find('li:last');
+                    last.addClass('hover');
+                    input.val(last.html());
+                }
+                
+            }else if(event.keyCode == 40){
+                if(current.length>0){
+                    var nextLi = current.removeClass('hover').next();
+                    if(nextLi.length>0){
+                        nextLi.addClass('hover');
+                        input.val(nextLi.html());
+                    }
+                }else{
+                    var first = suggestWrap.find('li:first');
+                    first.addClass('hover');
+                    input.val(first.html());
+                }
+            }
+            
+        //输入字符
+        }else{ 
+            var valText = $.trim(input.val());
+            if(valText ==''||valText==key){
+                return;
+            }
+            searchFuc(valText);
+            key = valText;
+        }           
+        
+    }
+    //请求返回后，执行数据展示
+    this.dataDisplay = function(data){
+        if(data.length<=0){
+            suggestWrap.hide();
+            return;
+        }
+        
+        //往搜索框下拉建议显示栏中添加条目并显示
+        var li;
+        var tmpFrag = document.createDocumentFragment();
+        suggestWrap.find('ul').html('');
+        for(var i=0; i<data.length; i++){
+            li = document.createElement('LI');
+            li.innerHTML = data[i];
+            tmpFrag.appendChild(li);
+        }
+        suggestWrap.find('ul').append(tmpFrag);
+        suggestWrap.show();
+        
+        //为下拉选项绑定鼠标事件
+        suggestWrap.find('li').hover(function(){
+                suggestWrap.find('li').removeClass('hover');
+                $(this).addClass('hover');
+        
+            },function(){
+                $(this).removeClass('hover');
+        }).bind('click',function(){
+            input.val(this.innerHTML);
+            suggestWrap.hide();
+        });
+    }
+    init();
+};
+
+//实例化输入提示的JS,参数为进行查询操作时要调用的函数名
+var searchSuggest =  new oSearchSuggest(sendKeyWordToBack);
+
+//这是一个模似函数，实现向后台发送ajax查询请求，并返回一个查询结果数据，传递给前台的JS,再由前台JS来展示数据。本函数由程序员进行修改实现查询的请求
+//参数为一个字符串，是搜索输入框中当前的内容
+function sendKeyWordToBack(keyword){
+         var obj = {
+                "keyword" : keyword
+             };
+             $.ajax({
+                       type: "POST",
+                       url: "/search/suggest",
+                       contentType: "application/json; charset=utf-8",
+                       async:false,
+                       data: JSON.stringify(obj),
+                       dataType: "json",
+                       success: function(data){
+                         //var json = eval("("+data+")");
+                         // var key=data.split(",");
+                         var key = data
+                         var aData = [];
+                         for(var i=0;i<8;i++){
+                                //以下为根据输入返回搜索结果的模拟效果代码,实际数据由后台返回
+                            if(key[i]!=""){
+                                  aData.push(key[i]);
+                            }
+                         }
+                        //将返回的数据传递给实现搜索输入框的输入提示js类
+                         searchSuggest.dataDisplay(aData);
+                       }
+         });      
+             
+                //以下为根据输入返回搜索结果的模拟效果代码,实际数据由后台返回
+                // var aData = [];
+                // aData.push(keyword+'地铁');
+                // aData.push(keyword+'居民');
+                // aData.push(keyword+'交通线');
+                // aData.push(keyword+'楼盘房价');
+                // aData.push(keyword+'2017');
+                // aData.push(keyword+'学校');
+                // //将返回的数据传递给实现搜索输入框的输入提示js类
+                // searchSuggest.dataDisplay(aData);
+    
+}
+
+</script>
+
+
+
+<!--js部分-->
+<script type="text/javascript" src="{{url_for("static", filename = "js/clock.js")}}"></script>
+<!-- <script src="js/clock.js"></script> -->
+<script>
+    //搜索框自动补全; 数据源是可返回 JSON 数据的服务器端脚本
+    // $('.searchIpt').AutoComplete({
+    //     //source: "search.php",
+    //     'data': ['About Me', '审美网', 'abcdefg', 'One', 'Two', 'Three', 'Four', 'Five', 'Six','smwell.com', 'Seven', 'Eight', 'Nine', 'Ten', 'Eleven', 'Twelve'],
+    //     'itemHeight': 24,
+    //     'width': 529,
+    // }).AutoComplete('show');
+        
+    $('.ctnerTab a').click(function(){
+        if(!$(this).hasClass('on')){
+            $('.ctnerTab a').removeClass('on').eq($(this).index()).addClass('on');
+            $('.rtNavs').stop(true,true).hide(200).eq($(this).index()).show(300);
+        }
+    });
+    
+    $('.menusWrapper a').click(function(){
+        if(!$(this).hasClass('active')){
+            $('.menusWrapper a').removeClass('active').eq($(this).index()).addClass('active');
+            $('.cbox').stop(true,true).animate({top:318},100).hide().eq($(this).index()).animate({top:0},400).show();
+        }
+    });
+    
+    $('.smallPics a').click(function(){
+        if(!$(this).hasClass('active')){
+            $('.smallPics a').removeClass('active').eq($(this).index()).addClass('active');
+            $('.picLink').stop(true,true).removeClass('active').eq($(this).index()).addClass('active');
+        }
+    });
+            
+    $('.titleT').hover(function(){
+        if(!$(this).hasClass('on')){
+            $('.titleT').removeClass('on').eq($(this).index()).addClass('on');
+            $('.topicB').stop(true,true).hide().eq($(this).index()).show();
+        }
+    });
+</script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,511 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>搜索</title>
+<meta name="description" content=" 内容介绍不超过100个中文">
+<meta name="keywords" content=" 内容相关关键词3-5个">
+
+
+<!-- <link href="static/css/index.css" rel="stylesheet" type="text/css" /> -->
+<link href="{{url_for("static", filename = "css/index.css")}}" rel="stylesheet" type="text/css" />
+
+<link rel="stylesheet" href="{{url_for("static", filename = "css/clock.css")}}" type="text/css"/>
+
+<link rel="stylesheet" href="{{url_for("static", filename = "css/common.css")}}" type="text/css"/>
+
+<!-- <script type="text/javascript" src="static/js/jquery-1.4.3.min.js"></script> -->
+<script type="text/javascript" src="{{url_for("static", filename = "js/jquery-1.4.3.min.js")}}"></script>
+
+<script src="js/jquery.js"></script>
+<script src="js/bootstrap-typeahead.js"></script>
+<script src="js/jquery.min.js"></script>
+<script src="js/jquery.autocomplete.min.js"></script>
+
+
+
+</head>
+
+<body>
+    <div id="container" class="gover_search">
+
+        <!--头部分-->
+        <header id="header">
+            <div class="box">
+                <div class="clock">
+                    <span class="hours"></span>  
+                    <span class="minutes"></span>
+                </div>
+                <div class="date">
+                    <div id="daymonth"></div>  
+                    <div id="year"></div>
+                </div>
+            </div>
+
+            <!--主页的logo-->
+            <div class="logo"><img width="270" height="129" src="../static/images/news.jpg" alt="logo" /></div>
+        </header>
+
+
+        <div id="content" class="searchBox">
+            <form id="search" class="search_form" action="/search/" method="POST">
+            <p style="text-align: center;">
+                <span style="text-align: center;" class="search_t">WeiBu</span>
+                {% if key %}
+                    <input name="key_word" type="text" class="searchIpt f14" id="input_key_word" placeholder="请输入关键词或通配符表达式">
+                {% else %}
+                    <input name="key_word" type="text" class="searchIpt f14" id="input_key_word" placeholder="请输入关键词或通配符表达式">
+                {% endif %}
+                    <input type="submit" value="搜索" class="btn cp">
+                <div class="search_suggest" id="gov_search_suggest">
+                    <ul>
+                    </ul>
+                </div>
+            </p>
+            </form>
+        </div>
+
+
+
+
+        <!--主页推荐框-->
+        <div class="mainContents oh">
+            <!--左侧分类menu-->
+            <div class="menusWrapper fl">
+                <a class="active" href="javascript:;">最热新闻</a>
+                <a href="javascript:;">娱乐</a>
+                <a href="javascript:;">体育</a>
+                <a href="javascript:;">军事</a>
+                <a href="javascript:;">网站导航</a>
+            </div>
+                
+            <div class="ctnerWrapper">
+                <div class="ctnerBox">
+                    <!--最热新闻部分-->
+                    <div id="cbox-2" class="cbox tl dn">
+                        <div class="newsBox oh">
+                            <div class="sliderBox fl">
+                                <div class="slider">
+                                    <!--每条新闻的链接、图片及题目-->
+                                    <a href="#" target="_blank" class="picLink active">
+                                        <img width="425" height="260" src="../static/images/news1.jpg" alt="" />
+                                        <span href="#" target="_blank" class="picTitle">铁路积分可换车票 买票福利 积分达1万分可兑换车票</span>
+                                    </a>
+                                    <a href="#" target="_blank" class="picLink">
+                                        <img width="425" height="260" src="../static/images/news2.jpg" alt="" />
+                                        <span href="#" target="_blank" class="picTitle">叶挺长子叶正大中将逝世 毛主席周总理曾为他题词</span>
+                                    </a>
+                                    <a href="#" target="_blank" class="picLink">
+                                        <img width="425" height="260" src="../static/images/news3.jpg" alt="" />
+                                        <span href="#" target="_blank" class="picTitle">凶杀案404天后，陈世峰和江歌母亲第一次见面</span>
+                                    </a>
+                                    <a href="#" target="_blank" class="picLink">
+                                        <img width="425" height="260" src="../static/images/news4.jpg" alt="" />
+                                        <span href="#" target="_blank" class="picTitle">假新闻！特朗普怒怼：我哪有看8个小时电视</span>
+                                    </a>
+                                    <a href="#" target="_blank" class="picLink">
+                                        <img width="425" height="260" src="../static/images/news5.jpg" alt="" />
+                                        <span href="#" target="_blank" class="picTitle">习近平总书记@全体党员，纠正“四风”不能止步</span>
+                                    </a>
+                                </div>
+                                <div class="smallPics">
+                                    <a class="active"><img width="68" height="40" src="images/news1.jpg" alt="" /></a>
+                                    <a><img width="68" height="40" src="../static/images/news2.jpg" alt="" /></a>
+                                    <a><img width="68" height="40" src="../static/images/news3.jpg" alt="" /></a>
+                                    <a><img width="68" height="40" src="../static/images/news4.jpg" alt="" /></a>
+                                    <a><img width="68" height="40" src="../static/images/news5.jpg" alt="" /></a>
+                                </div>
+                            </div>
+                            <div class="topic">
+                                <div class="topicTop">
+                                    <span class="titleWords titleT on"><a href="javascript:;">搜索风云榜</a></span>
+                                    <!-- <span class="titleTopic mytitle"><a href="javascript:;">热门话题</a></span> -->
+                                    <button class="changeWords" href="javascript:;">换一换</button>
+                                </div>
+                                <div class="topicList">
+                                    <div class="wBox topicB dn">
+                                        <!--搜索风云榜内容-->
+                                        <ul id="navigation" class="navigation">
+                                            {% if error%}
+                                            {% for doc in docs%}
+                                            <!-- <div id="doc" class="doc"> -->
+                                            <li>
+                                                <a href="/search/{{doc.id}}/" target="_blank">{{doc.title}}</a>
+                                            </li>
+                                                    <!-- <p>{{doc.time}}<br/>{{doc.snippet}}<br/>
+                                                    <a href="{{ doc.url }}" target="_blank">{{doc.url}}</a><br/>
+                                                    <a href="/similar/search/{{doc.id}}/" target="_blank">更多相关新闻查看</a>
+                                                    </p> -->
+                
+                                            <!-- /div> -->
+                                            <!-- <br/> -->
+                                            {% endfor %}
+                                            
+                                            {% else %}
+                                                <p>对不起，没有您搜索的网页！</p>
+                                            {% endif %}
+
+                                        </ul>
+
+                                    </div>
+                                    <!--热门话题内容-->
+                                    <!-- <div class="tBox topicB dn">
+                                        <ul>
+                                            <li><a target="_blank" href="#">话题11111</a></li>
+                                            <li><a target="_blank" href="#">话题22222</a></li>
+                                            <li><a target="_blank" href="#">话题33333</a></li>
+                                            <li><a target="_blank" href="#">话题44444</a></li>
+                                            <li><a target="_blank" href="#">话题55555</a></li>
+                                            <li><a target="_blank" href="#">话题66666</a></li>
+                                            <li><a target="_blank" href="#">话题77777</a></li>
+                                            <li><a target="_blank" href="#">话题88888</a></li>
+                                            <li><a target="_blank" href="#">话题99999</a></li>
+                                            <li><a target="_blank" href="#">话题11111</a></li>
+                                            <li><a target="_blank" href="#">话题22222</a></li>
+                                            <li><a target="_blank" href="#">话题33333</a></li>
+                                            <li><a target="_blank" href="#">话题44444</a></li>
+                                            <li><a target="_blank" href="#">话题55555</a></li>
+                                            <li><a target="_blank" href="#">话题66666</a></li>
+                                            <li><a target="_blank" href="#">话题77777</a></li>
+                                        </ul>
+                                    </div> -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="cbox-3" class="cbox tl dn">
+                        <p class="pt15 tc f14">娱乐，与热门新闻类似</p>
+                    </div>
+                    <div id="cbox-4" class="cbox tl dn">
+                        <p class="pt15 tc f14">体育，与热门新闻类似</p>
+                    </div>
+                    <div id="cbox-5" class="cbox tl dn">
+                        <p class="pt15 tc f14">军事，与热门新闻类似</p>
+                    </div>
+                    
+                    <!--推荐导航内容部分-->
+                    <div id="cbox-1" class="cbox tl dn">
+                        <div class="ctnerTab pr tc">
+                            <a href="#" class="on">推荐导航</a>
+                        </div>
+                        
+                        <div class="hotNavs rtNavs dn oh pt15">
+                            <div class="navTitle fl">热门网址</div>
+                            <div class="navArea oh">
+                                <a href="http://www.taobao.com" target="_blank" title="淘宝网"><img width="115" height="70" src="../static/images/101.png" alt="" /></a>
+                                <a href="http://www.jd.com" target="_blank" title="京东商城"><img width="115" height="70" src="../static/images/102.png" alt="" /></a>
+                                <a href="http://www.12306.cn/mormhweb/" target="_blank" title="铁路客户服务中心"><img width="115" height="70" src="../static/images/103.png" alt="" /></a>
+                                <a href="http://www.4399.com/" target="_blank" title="4399小游戏"><img width="115" height="70" src="../static/images/104.png" alt="" /></a>
+                                <a href="http://www.163.com/" target="_blank" title="网易"><img width="115" height="70" src="../static/images/20.png" alt="" /></a>
+                                <a href="http://www.youku.com/" target="_blank" title="优酷"><img width="115" height="70" src="../static/images/106.png" alt="" /></a>
+                                <a href="https://qzone.qq.com/" target="_blank" title="QQ空间"><img width="115" height="70" src="../static/images/107.png" alt="" /></a>
+                                <a href="http://www.iqiyi.com/" target="_blank" title="爱奇艺"><img width="115" height="70" src="../static/images/108.png" alt="" /></a>
+                                <a href="https://weibo.com/" target="_blank" title="新浪微博"><img width="115" height="70" src="../static/images/109.png" alt="" /></a>
+                                <a href="hhttps://wx.qq.com/" target="_blank" title="微信"><img width="115" height="70" src="../static/images/110.png" alt="" /></a>
+                                <a href="http://bj.58.com/" target="_blank" title="58同城"><img width="115" height="70" src="../static/images/111.png" alt="" /></a>
+                                <a href="https://www.mi.com/" target="_blank" title="小米"><img width="115" height="70" src="../static/images/112.png" alt="" /></a>
+                                <a href="https://www.autohome.com.cn/beijing/" target="_blank" title="汽车之家"><img width="115" height="70" src="../static/images/113.png" alt="" /></a>
+                                <a href="http://ts.zhaopin.com/jump/index_new.html?sid=121113803&site=pzzhubiaoti1" target="_blank" title="智联招聘"><img width="115" height="70" src="../static/images/114.png" alt="" /></a>
+                                <a href="https://www.vip.com/" target="_blank" title="唯品会"><img width="115" height="70" src="../static/images/115.png" alt="" /></a>
+                                <a href="http://www.ctrip.com/?utm_source=baidu&utm_medium=cpc&utm_campaign=baidu81&campaign=CHNbaidu81&adid=index&gclid=&isctrip=T" target="_blank" title="携程"><img width="115" height="70" src="../static/images/116.png" alt="" /></a>
+                                <a href="http://www.ifeng.com/" target="_blank" title="凤凰网"><img width="115" height="70" src="../static/images/12.png" alt="" /></a>
+                                <a href="https://www.douban.com/" target="_blank" title="豆瓣"><img width="115" height="70" src="../static/images/117.png" alt="" /></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+        <!-- <hr/> -->
+        <!-- {% block high_search%}
+        {% endblock %} -->
+        <!-- {% if error%}
+            {% for doc in docs%}
+            <div id="doc">
+                <ul id="navigation">
+                    <p><big><a href="/search/{{doc.id}}/" target="_blank">{{doc.title}}</a></big></p>
+                    <p>{{doc.time}}<br/>{{doc.snippet}}<br/>
+                    <a href="{{ doc.url }}" target="_blank">{{doc.url}}</a><br/>
+                    <a href="/similar/search/{{doc.id}}/" target="_blank">更多相关新闻查看</a>
+                    </p>
+                </ul>
+            </div>
+            <br/>
+            {% endfor %}
+        {% block next %}
+        <ul>
+            {% for i in page %}
+                <a href="/search/page/{{i}}/">{{i}}</a>&nbsp;
+            {% endfor %}
+        </ul>
+        {% endblock %}
+        {% else %}
+            <p>对不起，没有您搜索的网页！</p>
+        {% endif %} -->
+		
+		<div id="footer" style="background-color:FFFFFF;clear:both;text-align:center;" >
+			<hr>
+            &copy; 2017 <a href="http://www.weibu.net/" target="_blank">WeiBu</a>
+        </div>
+		
+    </div>
+
+
+
+
+<script type="text/javascript">
+
+//实现搜索输入框的输入提示js类
+function oSearchSuggest(searchFuc){
+    var input = $('#input_key_word');
+    var suggestWrap = $('#gov_search_suggest');
+    var key = "";
+    var init = function(){
+        input.bind('keyup',sendKeyWord);
+        input.bind('blur',function(){setTimeout(hideSuggest,100);})
+    }
+    var hideSuggest = function(){
+        suggestWrap.hide();
+    }
+    
+    //发送请求，根据关键字到后台查询
+    var sendKeyWord = function(event){
+        
+        //键盘选择下拉项
+        if(suggestWrap.css('display')=='block'&&event.keyCode == 38||event.keyCode == 40){
+            var current = suggestWrap.find('li.hover');
+            if(event.keyCode == 38){
+                if(current.length>0){
+                    var prevLi = current.removeClass('hover').prev();
+                    if(prevLi.length>0){
+                        prevLi.addClass('hover');
+                        input.val(prevLi.html());
+                    }
+                }else{
+                    var last = suggestWrap.find('li:last');
+                    last.addClass('hover');
+                    input.val(last.html());
+                }
+                
+            }else if(event.keyCode == 40){
+                if(current.length>0){
+                    var nextLi = current.removeClass('hover').next();
+                    if(nextLi.length>0){
+                        nextLi.addClass('hover');
+                        input.val(nextLi.html());
+                    }
+                }else{
+                    var first = suggestWrap.find('li:first');
+                    first.addClass('hover');
+                    input.val(first.html());
+                }
+            }
+            
+        //输入字符
+        }else{ 
+            var valText = $.trim(input.val());
+            if(valText ==''||valText==key){
+                return;
+            }
+            searchFuc(valText);
+            key = valText;
+        }           
+        
+    }
+    //请求返回后，执行数据展示
+    this.dataDisplay = function(data){
+        if(data.length<=0){
+            suggestWrap.hide();
+            return;
+        }
+        
+        //往搜索框下拉建议显示栏中添加条目并显示
+        var li;
+        var tmpFrag = document.createDocumentFragment();
+        suggestWrap.find('ul').html('');
+        for(var i=0; i<data.length; i++){
+            li = document.createElement('LI');
+            li.innerHTML = data[i];
+            tmpFrag.appendChild(li);
+        }
+        suggestWrap.find('ul').append(tmpFrag);
+        suggestWrap.show();
+        
+        //为下拉选项绑定鼠标事件
+        suggestWrap.find('li').hover(function(){
+                suggestWrap.find('li').removeClass('hover');
+                $(this).addClass('hover');
+        
+            },function(){
+                $(this).removeClass('hover');
+        }).bind('click',function(){
+            input.val(this.innerHTML);
+            suggestWrap.hide();
+        });
+    }
+    init();
+};
+
+//实例化输入提示的JS,参数为进行查询操作时要调用的函数名
+var searchSuggest =  new oSearchSuggest(sendKeyWordToBack);
+
+//这是一个模似函数，实现向后台发送ajax查询请求，并返回一个查询结果数据，传递给前台的JS,再由前台JS来展示数据。本函数由程序员进行修改实现查询的请求
+//参数为一个字符串，是搜索输入框中当前的内容
+function sendKeyWordToBack(keyword){
+         var obj = {
+                "keyword" : keyword
+             };
+             $.ajax({
+                       type: "POST",
+                       url: "/search/suggest",
+                       contentType: "application/json; charset=utf-8",
+                       async:false,
+                       data: JSON.stringify(obj),
+                       dataType: "json",
+                       success: function(data){
+                         //var json = eval("("+data+")");
+                         // var key=data.split(",");
+                         var key = data
+                         var aData = [];
+                         for(var i=0;i<8;i++){
+                                //以下为根据输入返回搜索结果的模拟效果代码,实际数据由后台返回
+                            if(key[i]!=""){
+                                  aData.push(key[i]);
+                            }
+                         }
+                        //将返回的数据传递给实现搜索输入框的输入提示js类
+                         searchSuggest.dataDisplay(aData);
+                       }
+         });      
+             
+                //以下为根据输入返回搜索结果的模拟效果代码,实际数据由后台返回
+                // var aData = [];
+                // aData.push(keyword+'地铁');
+                // aData.push(keyword+'居民');
+                // aData.push(keyword+'交通线');
+                // aData.push(keyword+'楼盘房价');
+                // aData.push(keyword+'2017');
+                // aData.push(keyword+'学校');
+                // //将返回的数据传递给实现搜索输入框的输入提示js类
+                // searchSuggest.dataDisplay(aData);
+    
+}
+
+</script>
+
+
+
+<!--js部分-->
+<script type="text/javascript" src="{{url_for("static", filename = "js/clock.js")}}"></script>
+<!-- <script src="js/clock.js"></script> -->
+<script>
+
+    function hotnews_suggest(){
+        var newsuggest = $('#doc');
+
+        //请求返回后，执行数据展示
+        this.dataDisplay = function(data){
+            // if(data.length<=0){
+            //     suggestWrap.hide();
+            //     return;
+            // }
+            
+            //往搜索框下拉建议显示栏中添加条目并显示
+            var li;
+            var tmpFrag = document.createDocumentFragment();
+            newsuggest.find('ul').html('');
+            for(var i=0; i<data.length; i++){
+                li = document.createElement('LI');
+                li.innerHTML = data[i];
+                tmpFrag.appendChild(li);
+            }
+            newsuggest.find('ul').append(tmpFrag);
+            newsuggest.show();
+            
+            // //为下拉选项绑定鼠标事件
+            // suggestWrap.find('li').hover(function(){
+            //         suggestWrap.find('li').removeClass('hover');
+            //         $(this).addClass('hover');
+            
+            //     },function(){
+            //         $(this).removeClass('hover');
+            // }).bind('click',function(){
+            //     input.val(this.innerHTML);
+            //     suggestWrap.hide();
+            // });
+        }
+
+        init()
+
+    };
+
+    var hot = new hotnews_suggest();
+    //搜索框自动补全; 数据源是可返回 JSON 数据的服务器端脚本
+    // $('.searchIpt').AutoComplete({
+    //     //source: "search.php",
+    //     'data': ['About Me', '审美网', 'abcdefg', 'One', 'Two', 'Three', 'Four', 'Five', 'Six','smwell.com', 'Seven', 'Eight', 'Nine', 'Ten', 'Eleven', 'Twelve'],
+    //     'itemHeight': 24,
+    //     'width': 529,
+    // }).AutoComplete('show');
+        
+    $('.ctnerTab a').click(function(){
+        if(!$(this).hasClass('on')){
+            $('.ctnerTab a').removeClass('on').eq($(this).index()).addClass('on');
+            $('.rtNavs').stop(true,true).hide(200).eq($(this).index()).show(300);
+        }
+    });
+    
+    $('.menusWrapper a').click(function(){
+        if(!$(this).hasClass('active')){
+            $('.menusWrapper a').removeClass('active').eq($(this).index()).addClass('active');
+            $('.cbox').stop(true,true).animate({top:318},100).hide().eq($(this).index()).animate({top:0},400).show();
+        }
+    });
+    
+    $('.smallPics a').click(function(){
+        if(!$(this).hasClass('active')){
+            $('.smallPics a').removeClass('active').eq($(this).index()).addClass('active');
+            $('.picLink').stop(true,true).removeClass('active').eq($(this).index()).addClass('active');
+        }
+    });
+            
+    $('.titleT').hover(function(){
+        if(!$(this).hasClass('on')){
+            $('.titleT').removeClass('on').eq($(this).index()).addClass('on');
+            $('.topicB').stop(true,true).hide().eq($(this).index()).show();
+        }
+        // $.ajax({
+        //     url: "/search/top_suggest/",
+        //     type: "POST",
+        //     dataType: "json",
+        //     // contentType: "application/json; charset=utf-8",
+        //     async:false,
+        //     success: function(result){
+        //         var docs = []
+        //         for(var i=0;i<8;i++){
+        //             //以下为根据输入返回搜索结果的模拟效果代码,实际数据由后台返回
+        //             docs.push(result[i]);
+        //         }
+        //         hot.dataDisplay(docs);
+
+        //     },
+        //     error: function(error){
+        //         console.log(error);
+        //     }
+        // });
+    });
+
+    
+
+</script>
+
+
+
+</body>
+</html>

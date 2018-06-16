@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- <title>{{doc.title}}</title> -->
+    <meta charset="UTF-8">
+    <title>news show page</title>
+    <link rel="stylesheet" href="{{url_for("static", filename = "css/article.css")}}" type="text/css">
+
+</head>
+<body>
+    <!--新闻头信息-->
+    <div class="top">
+        <div class="top_title">{{doc.title}}</div>
+        <p class="top_info">{{doc.time}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        {{doc.source}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;关键词：{{doc.keyword}}</p>
+    </div>
+
+
+    <!--左侧排行部分-->
+    <div class='blog'>
+        <div class='blog-type'>
+            <div class='popular'>相关推荐</div>
+        </div>
+        <!--热度排行的每个内容-->
+        <div class='popular-posts'>
+            
+            {% for each in doc.extra %}
+            <a href="/search/{{each.id}}/" title="显示部分新闻摘要内容"  style="text-decoration: none">
+                <div class='post'>
+                  <div class='post-meta'>
+
+                    <div class='category'>
+                        <p class="sug_cat">类别:{{each.category}} &nbsp;</p>
+                    </div>
+                    <div class='time'>
+                        <p class="sug_time">时间:{{each.time}}</p>
+                    </div>
+
+                  </div>
+                  <h1 class='title'>{{each.title}}</h1>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!--正文显示新闻内容部分-->
+    <div class='content'>
+        <!-- <table width="500" border="0">
+            <tr> -->
+                <!-- <td style="width:600px"> -->
+        <p style="text-align:left">{{doc.body}}</p>
+                <!-- </td> -->
+            <!-- </tr>
+        </table> -->
+        <p>原文链接：<a href="{{doc.url}}">{{doc.url}}</a></p>
+    </div>
+
+    <!--评论区域-->
+    <div class='blog-type' style="margin-top: 20px;"><div class='popular'>评论区</div></div>
+    <div class="comment">
+        <!--每条评论内容 循环显示-->
+        {% for com in doc.comment_con %}
+        <a style="text-decoration: none">
+            <div id="commentself">
+                {% for each in com %}
+                <p id="messenger-bulle">{{each}}</p>
+                {% endfor %}
+                <!-- <span id="bullemeta">发布时间</span>
+                <span id="like-holder">
+                    <span class=" like-main"=" "> 
+                        <span class="like-main-emo"></span> 
+                        <span class="like">Like</span>
+                        <span class="likecount">1.2k</span>
+                    </span>
+                </span> -->
+            </div>
+        </a>
+        {% endfor %}
+
+    </div>
+    <!--页尾-->
+    <div class="footerinfo">
+        <p>&copy;2017 信息检索导论作业 搜索引擎 ***小队开发</p>
+    </div>
+    <a href="#" class="go-top">Go Top</a>
+    <script type="text/javascript">
+        $(document).ready(function() {
+                // Animate the scroll to top
+                $('.go-top').click(function(event) {
+                    event.preventDefault();
+                    $('html, body').animate({scrollTop: 0}, 300);
+                })
+            });
+    </script>
+
+
+    
+
+</body>
+</html>
