@@ -1,0 +1,9 @@
+eclipse.preferences.version=1
+encoding//News/News/items.py=utf-8
+encoding//News/News/middlewares.py=utf-8
+encoding//News/News/pipelines.py=utf-8
+encoding//News/News/settings.py=utf-8
+encoding//News/News/spiders/params.py=utf-8
+encoding//News/News/spiders/wangyi_spider.py=utf-8
+encoding//News/News/spiders/xinlang_spider.py=utf-8
+encoding//News/execute.py=utf-8
