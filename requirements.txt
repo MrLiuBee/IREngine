@@ -29,7 +29,7 @@ lxml==4.1.1
 Markdown==2.6.9
 MarkupSafe==1.0
 numexpr==2.6.4
-numpy==1.13.3
+numpy==1.22.0
 pandas==0.21.0
 parsel==1.2.0
 Pillow==5.0.0
