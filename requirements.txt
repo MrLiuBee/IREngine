@@ -56,7 +56,7 @@ tables==3.4.2
 tesseract==0.1.3
 thulac==0.1.2
 tinyocr==0.2.3
-Twisted==17.9.0
+Twisted==22.10.0
 urllib3==1.22
 w3lib==1.18.0
 Werkzeug==0.12.2
