@@ -26,6 +26,7 @@
    python recommendation_module.py
    cd ../web
    python main.py  
+
  
    不出问题打开 http://127.0.0.1:5000/ 即可搜索，工程详细说明见文件 信息检索报告.pdf
    其中 NewScrapy文件夹为爬虫模块，另两位同学做的，参考一下～
