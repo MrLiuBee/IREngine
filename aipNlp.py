@@ -23,10 +23,6 @@ else:
 
 
 
-
-
-
-
 # if len(one) > 1:
 # 						fee = feel_analyse(one[1])
 # 						if fee == 0:
