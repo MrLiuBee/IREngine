@@ -16,7 +16,7 @@ Cython==0.27.3
 Django==2.0
 enum34==1.1.6
 Flask==0.12.2
-html5lib==0.9999999
+html5lib==0.999999999
 hyperlink==17.3.1
 idna==2.6
 incremental==17.5.0
